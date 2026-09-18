@@ -1,0 +1,15 @@
+{% extends 'words/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card card-dark">
+            <div class="card-body p-4 text-center">
+                <h3 class="page-header">Вы вышли из системы</h3>
+                <a href="{% url 'login' %}" class="btn btn-crimson">Войти снова</a>
+                <a href="{% url 'word-list' %}" class="btn btn-outline-cream">На главную</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

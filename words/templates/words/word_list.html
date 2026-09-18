@@ -1,0 +1,54 @@
+{% extends 'words/base.html' %}
+
+{% block content %}
+<h1 class="page-header">Словарь иностранных слов</h1>
+
+<!-- ФИЛЬТР СВЕРХУ, а не сбоку -->
+<div class="filter-bar mb-4">
+    <span style="color: #888; margin-right: 15px; font-size: 0.9rem;">Язык:</span>
+    <a href="{% url 'word-list' %}" class="{% if not current_lang %}active{% endif %}">Все</a>
+    <a href="?lang=en" class="{% if current_lang == 'en' %}active{% endif %}">Английский</a>
+    <a href="?lang=de" class="{% if current_lang == 'de' %}active{% endif %}">Немецкий</a>
+    <a href="?lang=fr" class="{% if current_lang == 'fr' %}active{% endif %}">Французский</a>
+    <a href="?lang=es" class="{% if current_lang == 'es' %}active{% endif %}">Испанский</a>
+    <a href="?lang=it" class="{% if current_lang == 'it' %}active{% endif %}">Итальянский</a>
+</div>
+
+<div class="row">
+    {% for w in words %}
+    <div class="col-md-4 mb-4">
+        <div class="card card-dark h-100">
+            {% if w.image %}
+                <img src="{{ w.image.url }}" class="card-img-top" style="height: 160px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <div class="mb-2"><span class="badge-crimson">{{ w.get_language_display }}</span></div>
+                <h4 class="card-title mb-2">{{ w.word }}</h4>
+                <p class="mb-3" style="color: #ccc;">{{ w.translation }}</p>
+                <a href="{% url 'word-detail' w.id %}" class="btn btn-outline-cream btn-sm">Открыть карточку</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-dark" style="background: #222; border: 1px solid #333; color: #ccc;">
+            Пока пусто. Добавьте слова через админку.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" style="background:#222;border-color:#333;color:#fff;" href="?page={{ page_obj.previous_page_number }}{% if current_lang %}&lang={{ current_lang }}{% endif %}">← Назад</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link" style="background:#a4161a;border-color:#a4161a;color:#fff;">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" style="background:#222;border-color:#333;color:#fff;" href="?page={{ page_obj.next_page_number }}{% if current_lang %}&lang={{ current_lang }}{% endif %}">Вперёд →</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

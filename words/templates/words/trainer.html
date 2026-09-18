@@ -1,0 +1,54 @@
+{% extends 'words/base.html' %}
+
+{% block content %}
+<h1 class="page-header">Тренажёр</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card card-dark">
+            <div class="card-body text-center p-5">
+                <p style="color: #888; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem;">Слово</p>
+                <h2 id="word-display" class="word-highlight mb-4" style="font-size: 2.5rem;">Нажмите «Начать»</h2>
+
+                <div id="answer-block" style="display: none;">
+                    <hr>
+                    <p style="color: #888; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem;">Перевод</p>
+                    <h3 id="translation-display" style="color: #e5383b;"></h3>
+                    <p class="text-muted mt-3" id="example-display" style="font-style: italic;"></p>
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn btn-crimson px-4" id="btn-show" onclick="showTranslation()" disabled>Показать перевод</button>
+                    <button class="btn btn-outline-cream px-4" onclick="nextWord()">Следующее</button>
+                </div>
+
+                <p class="mt-4" style="color: #666;" id="counter"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const words = [
+        {% for w in words %}
+        { word: "{{ w.word|escapejs }}", translation: "{{ w.translation|escapejs }}", example: "{{ w.example|escapejs }}" }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    function nextWord() {
+        if (words.length === 0) { document.getElementById('word-display').textContent = "Словарь пуст"; return; }
+        const w = words[Math.floor(Math.random() * words.length)];
+        document.getElementById('word-display').textContent = w.word;
+        document.getElementById('translation-display').textContent = w.translation;
+        document.getElementById('example-display').textContent = w.example;
+        document.getElementById('answer-block').style.display = 'none';
+        document.getElementById('btn-show').disabled = false;
+        document.getElementById('counter').textContent = 'Всего слов в словаре: ' + words.length;
+    }
+    function showTranslation() {
+        document.getElementById('answer-block').style.display = 'block';
+        document.getElementById('btn-show').disabled = true;
+    }
+</script>
+{% endblock %}

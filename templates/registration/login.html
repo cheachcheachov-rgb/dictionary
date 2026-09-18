@@ -1,0 +1,29 @@
+{% extends 'words/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card card-dark">
+            <div class="card-body p-4">
+                <h3 class="page-header text-center">Вход</h3>
+                {% if form.errors %}<div class="alert alert-danger" style="background:#3a0d0d;border-color:#a4161a;color:#fff;">Неверное имя пользователя или пароль</div>{% endif %}
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label" style="color: #ccc;">Имя пользователя</label>
+                        <input type="text" name="username" class="form-control" style="background:#1a1a1a;border:1px solid #444;color:#fff;" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="color: #ccc;">Пароль</label>
+                        <input type="password" name="password" class="form-control" style="background:#1a1a1a;border:1px solid #444;color:#fff;" required>
+                    </div>
+                    <button type="submit" class="btn btn-crimson w-100">Войти</button>
+                </form>
+                <div class="text-center mt-3"><a href="{% url 'password_reset' %}">Забыли пароль?</a></div>
+                <hr>
+                <div class="text-center"><a href="{% url 'register' %}">Создать аккаунт</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
